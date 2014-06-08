@@ -1,0 +1,23 @@
+{
+    "name": "sourcescript/social-connect",
+    "description": "",
+    "authors": [
+        {
+            "name": "Sourcescript Innovations",
+            "email": "gian@sourcescript.ph"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "Sourcescript\\SocialConnect\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
