@@ -31,6 +31,7 @@ After the installation you have to do the following to be able to use the config
 You'll have a blank configuration file as follows
 ```php
 <?php
+<?php
 	return [
 		'facebook' 	=> [
 
@@ -39,14 +40,14 @@ You'll have a blank configuration file as follows
 			 *  ==========================/
 			 *  Found in your application itself
 			 */
-			'app_id'		=> '1420529088231410',
+			'app_id'		=> 'app_id',
 
 			/**
 			 *  Your Application Secret
 			 *  ==========================/
 			 *  Given By Facebook for auth purposes
 			 */
-			'app_secret'	=> 'e5321ec55a8bda414cb1dadbe54e715f',
+			'app_secret'	=> 'app_secret',
 
 			/**
 			 *  SCOPES
@@ -55,10 +56,7 @@ You'll have a blank configuration file as follows
 			 *  for facebook access
 			 */
 			'scopes' => [
-				'email',
-				'public_profile',
-				'user_friends',
-				'publish_stream'
+
 			],
 
 			/**
