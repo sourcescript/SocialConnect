@@ -16,12 +16,14 @@ class Chainable
 
 	public function setAttrib($key, $value)
 	{
-		if(strpos($this->uri, "&") < 0)
+		if(!strpos($this->uri, "?"))
 		{
 			$this->uri .= "?";
 		}
 
-		$this->uri .= "&".$key."=".$value;
+
+
+		$this->uri .= $key."=".$value."&";
 
 		return $this;
 	}
