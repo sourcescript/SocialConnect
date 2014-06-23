@@ -92,3 +92,9 @@ You'll have a blank configuration file as follows
 		Facebook::make()->getProfile(); //the parameter would be either 'me' (current user logged in) or any valid facebook username or ID
 ```
 
+##How to get the user's profile image in SocialConnect
+```php
+	<?php
+		Facebook::make()->getProfileImage();
+	
+```
