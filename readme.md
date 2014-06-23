@@ -31,7 +31,6 @@ After the installation you have to do the following to be able to use the config
 You'll have a blank configuration file as follows
 ```php
 <?php
-<?php
 	return [
 		'facebook' 	=> [
 
