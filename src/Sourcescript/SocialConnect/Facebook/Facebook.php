@@ -46,4 +46,19 @@ class Facebook extends OAuth2
 			return json_decode($contents, true);
 		}
 	}
+
+	public function getProfileImage($id = 'me')
+	{
+		$config = Config::get('social-connect::config.'.$this->type);
+		if(!$this->hasAccessToken()) {
+			return [
+				'message' 	=> 'No Access Token, login first.',
+				'for'		=> 'facebook.get_profile',
+				'type'		=> 'error'
+			];
+		}else {
+			$chainable = Chainable::make($this->payloadGraph.'/'.$id.'/picture')->setAttrib('access_token', $this->getAccessToken());
+			return $chainable->getURI();
+		}
+	}
 }
