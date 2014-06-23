@@ -38,7 +38,9 @@ abstract class OAuth2
 					->setAttrib('redirect_uri', $redirect_uri)
 					->setAttrib('type', 'web_server')
 					->setAttrib('response_type', 'token')
-					->setAttrib('client_secret', $config['app_secret']);
+					->setAttrib('client_secret', $config['app_secret'])
+					->setAttrib('scope',implode(',',$config['scopes']));
+			
 		if(!$code) {
 			return $chainable->getURI();
 		}else {
@@ -102,7 +104,7 @@ abstract class OAuth2
 						->setAttrib('client_secret', $config['app_secret'])
 						->setAttrib('redirect_uri', $redirect_uri)
 						->setAttrib('code', $code);
-
+						
 			$contents = file_get_contents($chainable->getURI());
 			$contents = explode('access_token=', $contents);
 
