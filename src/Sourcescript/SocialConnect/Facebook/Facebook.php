@@ -1,7 +1,9 @@
 <?php namespace Sourcescript\SocialConnect\Facebook;
 
 use \Config;
+
 use \Event;
+
 use \Input;
 use \Redirect;
 use \Session;
@@ -44,5 +46,4 @@ class Facebook extends OAuth2
 			return json_decode($contents, true);
 		}
 	}
-
 }

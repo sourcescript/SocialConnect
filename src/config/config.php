@@ -29,7 +29,7 @@
 			/**
 			 *  Login Options
 			 *  ==========================/
-			 *  For Logging In
+			 *  Callback URL
 			 */
 
 			'login'  => [
