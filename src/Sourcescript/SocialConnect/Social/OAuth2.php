@@ -21,27 +21,10 @@ abstract class OAuth2
 	 * @param
 	 * @return
 	 */
-	public function __construct($type, $payloadLogin, $payloadGraph)
-	{
-		$this->type = $type;
-		$this->payloadLogin = $payloadLogin;
-		$this->payloadGraph = $payloadGraph;
-
-		// Inject dependencies
-		$this->setDependencies();
-	}
-
-	/**
-	 * Resolve class dependencies (setter injector)
-	 * 
-	 * @param Illuminate\Config\Repository $config
-	 * @param Illuminate\Events\Dispatcher $event
-	 * @param Illuminate\Http\Request $input
-	 * @param Illuminate\Routing\Redirector $redirect
-	 * @param Illuminate\Session\Store $session
-	 * @return void
-	 */
-	protected function setDependencies(
+	public function __construct(
+		$type,
+		$payloadLogin,
+		$payloadGraph,
 		Config $config,
 		Event $event,
 		Input $input,
@@ -49,6 +32,11 @@ abstract class OAuth2
 		Session $session
 	)
 	{
+		$this->type = $type;
+		$this->payloadLogin = $payloadLogin;
+		$this->payloadGraph = $payloadGraph;
+
+		// Inject dependencies
 		$this->config = $config;
 		$this->event = $event;
 		$this->input = $input;
