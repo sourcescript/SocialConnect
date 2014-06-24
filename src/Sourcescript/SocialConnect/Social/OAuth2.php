@@ -1,10 +1,10 @@
 <?php namespace SourceScript\SocialConnect\Social;
 
-use \Config;
-use \Event;
-use \Input;
-use \Redirect;
-use \Session;
+use Illuminate\Config\Repository as Config;
+use Illuminate\Events\Dispatcher as Event;
+use Illuminate\Http\Request as Input;
+use Illuminate\Routing\Redirector as Redirect;
+use Illuminate\Session\Store as Session;
 
 
 use \Sourcescript\SocialConnect\URI\Chainable\Chainable;
@@ -20,8 +20,35 @@ abstract class OAuth2
 		$this->type = $type;
 		$this->payloadLogin = $payloadLogin;
 		$this->payloadGraph = $payloadGraph;
+		
+		$this->setDependencies();
 	}
-
+	
+	/**
+	 * Resolve class dependencies (setter injector)
+	 * 
+	 * @param Illuminate\Config\Repository $config
+	 * @param Illuminate\Events\Dispatcher $event
+	 * @param Illuminate\Http\Request $input
+	 * @param Illuminate\Routing\Redirector $redirect
+	 * @param Illuminate\Session\Store $session
+	 * @return void
+	 */
+	protected resolve setDependencies(
+		Config $config,
+		Event $event,
+		Input $input,
+		Redirect $redirect,
+		Session $session
+	)
+	{
+		$this->config = $config;
+		$this->event = $event;
+		$this->input = $input;
+		$this->redirect = $redirect;
+		$this->session = $session;
+	}
+	
 	public static function make()
 	{
 		$class = get_called_class();
