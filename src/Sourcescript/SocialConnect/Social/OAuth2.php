@@ -14,6 +14,12 @@ abstract class OAuth2
 	protected  $payloadLogin;
 	protected  $payloadGraph;
 	protected  $type;
+	
+	protected $config;
+	protected $event;
+	protected $input;
+	protected $redirect;
+	protected $session;
 
 	public function __construct($type, $payloadLogin, $payloadGraph)
 	{
