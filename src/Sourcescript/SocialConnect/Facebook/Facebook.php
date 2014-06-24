@@ -1,16 +1,8 @@
 <?php namespace Sourcescript\SocialConnect\Facebook;
 
-use \Config;
-
-use \Event;
-
-use \Input;
-use \Redirect;
-use \Session;
-
-
-use \Sourcescript\SocialConnect\URI\Chainable\Chainable;
-use \Sourcescript\SocialConnect\Social\OAuth2;
+use Config, Event, Input, Redirect, Session;
+use Sourcescript\SocialConnect\URI\Chainable\Chainable;
+use Sourcescript\SocialConnect\Social\OAuth2;
 
 
 class Facebook extends OAuth2
@@ -32,13 +24,13 @@ class Facebook extends OAuth2
 	public function getProfile($id = 'me', $fields = [])
 	{
 		$config = Config::get('social-connect::config.'.$this->type);
-		if(!$this->hasAccessToken()) {
+		if ( !$this->hasAccessToken() ) {
 			return [
 				'message' 	=> 'No Access Token, login first.',
 				'for'		=> 'facebook.get_profile',
 				'type'		=> 'error'
 			];
-		}else {
+		} else {
 			$chainable = Chainable::make($this->payloadGraph.'/'.$id);
 			$chainable->setAttrib('fields', implode(',', $fields))
 						->setAttrib('access_token', $this->getAccessToken());
@@ -50,15 +42,16 @@ class Facebook extends OAuth2
 	public function getProfileImage($id = 'me')
 	{
 		$config = Config::get('social-connect::config.'.$this->type);
-		if(!$this->hasAccessToken()) {
+		if ( ! $this->hasAccessToken() ) {
 			return [
 				'message' 	=> 'No Access Token, login first.',
 				'for'		=> 'facebook.get_profile',
 				'type'		=> 'error'
 			];
-		}else {
+		} else {
 			$chainable = Chainable::make($this->payloadGraph.'/'.$id.'/picture')->setAttrib('access_token', $this->getAccessToken());
 			return $chainable->getURI();
 		}
 	}
+	
 }
