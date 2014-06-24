@@ -29,17 +29,13 @@ abstract class OAuth2
 
 		$chainable = Chainable::make($this->payloadLogin);
 		$chainable->setAttrib('client_id', $config['app_id'])
-					->setAttrib('redirect_uri', $redirect_uri)
-					->setAttrib('type', 'web_server')
-					->setAttrib('response_type', 'token')
-					->setAttrib('client_secret', $config['app_secret'])
-					->setAttrib('scope',implode(',',$config['scopes']));
-			
-		if ( ! $code ) {
-			return $chainable->getURI();
-		} else {
-			return $chainable->setAttrib('code', $code)->getURI();
-		}
+			->setAttrib('redirect_uri', $redirect_uri)
+			->setAttrib('type', 'web_server')
+			->setAttrib('response_type', 'token')
+			->setAttrib('client_secret', $config['app_secret'])
+			->setAttrib('scope',implode(',',$config['scopes']));
+
+		return ! $code ? $chainable->getURI() : $chainable->setAttrib('code', $code)->getURI();
 	}
 
 	public function getTokenUrl()
@@ -54,6 +50,8 @@ abstract class OAuth2
 		return Redirect::to($login);
 	}
 
+
+	// this function is fucked up, please fix it. huurrr
 	public function login($redirect_uri = '')
 	{
 		$config = Config::get('social-connect::config.'.$this->type);
@@ -76,7 +74,6 @@ abstract class OAuth2
 			return Redirect::to($config['login']['redirect_uri']);
 		}
 
-
 	}
 
 	public function hasAccessToken()
@@ -86,28 +83,26 @@ abstract class OAuth2
 
 	public function getAccessToken($code = null, $redirect_uri = null)
 	{
+		if ( $this->hasAccessToken ) {
+			return Session::get($this->type . '.access_token');
+		}
+
 		$config = Config::get('social-connect::config.'.$this->type);
 
-		if( ! $this->hasAccessToken() ) {
-
-			$chainable = Chainable::make($this->payloadGraph."/oauth/access_token");
-			$chainable->setAttrib('client_id', $config['app_id'])
-						->setAttrib('type', 'web_server')
-						->setAttrib('response_type', 'token')
-						->setAttrib('client_secret', $config['app_secret'])
-						->setAttrib('redirect_uri', $redirect_uri)
-						->setAttrib('code', $code);
+		$chainable = Chainable::make($this->payloadGraph."/oauth/access_token");
+		$chainable->setAttrib('client_id', $config['app_id'])
+			->setAttrib('type', 'web_server')
+			->setAttrib('response_type', 'token')
+			->setAttrib('client_secret', $config['app_secret'])
+			->setAttrib('redirect_uri', $redirect_uri)
+			->setAttrib('code', $code);
 						
-			$contents = file_get_contents($chainable->getURI());
-			$contents = explode('access_token=', $contents);
+		$contents = file_get_contents($chainable->getURI());
+		$contents = explode('access_token=', $contents);
 
-			$this->setAccessToken($contents[1]);
+		$this->setAccessToken($contents[1]);
 
-			return $contents[1];
-		} else {
-			return Session::get($this->type.'.access_token');
-		}
-		
+		return $contents[1];
 	}
 
 	public function setAccessToken($token)
