@@ -21,12 +21,21 @@ abstract class OAuth2
 	protected $redirect;
 	protected $session;
 
+	/**
+	 * 
+	 * 
+	 * @param
+	 * @param
+	 * @param
+	 * @return
+	 */
 	public function __construct($type, $payloadLogin, $payloadGraph)
 	{
 		$this->type = $type;
 		$this->payloadLogin = $payloadLogin;
 		$this->payloadGraph = $payloadGraph;
 		
+		// Inject dependencies
 		$this->setDependencies();
 	}
 	
@@ -55,6 +64,11 @@ abstract class OAuth2
 		$this->session = $session;
 	}
 	
+	/**
+	 * Allows static creation of this class
+	 * 
+	 * @return {called class}
+	 */
 	public static function make()
 	{
 		$class = get_called_class();
@@ -62,6 +76,12 @@ abstract class OAuth2
 	}
 
 
+	/**
+	 * 
+	 * @param str	$redirect_uri
+	 * @param int	$code
+	 * @return str
+	 */
 	public function loginUrl($redirect_uri = '', $code = null)
 	{
 		$config = Config::get('social-connect::config.'.$this->type);
@@ -81,52 +101,76 @@ abstract class OAuth2
 		}
 	}
 
+
+	/**
+	 * 
+	 * @param str
+	 */
 	public  function getTokenUrl()
 	{
 		return $this->payloadGraph."/oauth/access_token";
 	}	
 
+	/**
+	 *
+	 * @return Response
+	 */ 
 	public  function loginRedirect($redirect_uri = '')
 	{
 		$class = get_called_class();
 		$login = $this->loginUrl($redirect_uri);
-		return Redirect::to($login);
+		return $this->redirect->to($login);
 	}
 
+	/**
+	 * 
+	 * @param str $redirect_uri
+	 * @return
+	 */
 	public  function login($redirect_uri = '')
 	{
-		$config = Config::get('social-connect::config.'.$this->type);
+		$config = $this->config->get('social-connect::config.'.$this->type);
 
 		if(!$this->hasAccessToken() 
-			&& !Input::get('code') ) {
+			&& !$this->input->has('code') ) {
 
 			return $this->loginRedirect($redirect_uri);
 
 		}elseif(Input::get('error')) {
 
-			return Input::all();
+			return $this->input->all();
 
-		}elseif($code = Input::get('code')) {
+		}elseif($code = $this->input->get('code')) {
 
 			$this->getAccessToken($code, $redirect_uri);
 
 		}
 
 		if($this->hasAccessToken()) {
-			return Redirect::to($config['login']['redirect_uri']);
+			return $this->redirect->to($config['login']['redirect_uri']);
 		}
 
 
 	}
 
+	/**
+	 * 
+	 * @return bool
+	 */
 	public  function hasAccessToken()
 	{
-		return Session::get($this->type.'.access_token') ? true : false;
+		return $this->session->get($this->type.'.access_token') ? true : false;
 	}
 
+	/**
+	 * 
+	 * @param
+	 * @param
+	 * @return str
+	 */
 	public  function getAccessToken($code = null, $redirect_uri = null)
 	{
-		$config = Config::get('social-connect::config.'.$this->type);
+		$config = $this->config->get('social-connect::config.'.$this->type);
 
 		if(!$this->hasAccessToken()) {
 
@@ -145,17 +189,19 @@ abstract class OAuth2
 
 			return $contents[1];
 		}else {
-			return Session::get($this->type.'.access_token');
+			return $this->session->get($this->type.'.access_token');
 		}
 		
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public  function setAccessToken($token)
 	{
 
-		return Session::put($this->type.'.access_token', $token);
+		return $this->session->put($this->type.'.access_token', $token);
 	}
-
-
 
 }
