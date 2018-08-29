@@ -2,7 +2,7 @@
 ##Created for Laravel By Sourcescript Innovations
 
 #Installation
-add the the following to your composer.json `"sourcescript/social-connect": "dev-master"`.  Do a `composer update --prefer-dist`.
+add the following to your composer.json `"sourcescript/social-connect": "dev-master"`.  Do a `composer update --prefer-dist`.
 
 Add the following to `config/app.php`:
 
